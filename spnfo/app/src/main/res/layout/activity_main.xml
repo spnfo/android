@@ -7,20 +7,29 @@
     android:layout_height="match_parent" >
 
     <fragment
+        android:id="@+id/racer_search_bar_fragment"
+        android:name="com.example.spnfo.RacerSearchBarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map" />
+
+    <fragment
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_constraintHeight_percent="0.46"
+        app:layout_constraintHeight_percent="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/racer_search_bar_fragment" />
 
     <fragment
         android:id="@+id/spectator_bar"
         android:name="com.example.spnfo.SpectatorSeparatorBarFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.08"
+        app:layout_constraintHeight_percent="0.05"
         app:layout_constraintTop_toBottomOf="@id/map"
         app:layout_constraintBottom_toTopOf="@id/my_recycler_view" />
 
@@ -30,7 +39,7 @@
         android:layout_height="0dp"
         android:background="@color/lightGray"
         android:scrollbars="vertical"
-        app:layout_constraintHeight_percent="0.46"
+        app:layout_constraintHeight_percent="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -8,18 +8,9 @@
     <View
         android:id="@+id/view_action_bar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/view_search_bar"/>
-
-    <View
-        android:id="@+id/view_search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/action_bar"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toTopOf="parent"/>
 
     <CheckBox
         android:id="@+id/separator_chkbx"
@@ -33,7 +24,7 @@
     <ImageView
         android:id="@+id/slide_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/drag_24"
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
         app:layout_constraintTop_toTopOf="@id/view_action_bar"
@@ -78,16 +69,6 @@
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
         app:layout_constraintRight_toRightOf="@id/data_switch_view" />
 
-    <EditText
-        android:id="@+id/search_box"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Search"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toTopOf="@id/view_search_bar"
-        app:layout_constraintBottom_toBottomOf="@id/view_search_bar"
-        app:layout_constraintLeft_toLeftOf="@id/view_search_bar"
-        app:layout_constraintRight_toRightOf="@id/view_search_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

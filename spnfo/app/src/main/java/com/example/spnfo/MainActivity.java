@@ -9,7 +9,6 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,8 +21,7 @@ public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, SpectatorSeparatorBarFragment.OnSpecBarChangeListener {
 
     Point screenSize;
-    Boolean resizeButtonPressed = false;
-    Float buttonHeight = (float) 0.04;
+    Float halfSubtractedHeight = (float) 0.06;
     int navBarHeight;
 
     private RecyclerView recyclerView;
@@ -97,16 +95,16 @@ public class MainActivity extends AppCompatActivity
         float perc = (y - navBarHeight) / screenSize.y;
 
         if (perc > 0.2 && perc < 0.8) {
-            lp1.matchConstraintPercentHeight = perc - buttonHeight;
-            lp2.matchConstraintPercentHeight = 1 - perc - buttonHeight;
+            lp1.matchConstraintPercentHeight = perc - halfSubtractedHeight;
+            lp2.matchConstraintPercentHeight = 1 - perc - halfSubtractedHeight;
         } else if (perc > 0.2) {
             // perc > 0.8
-            lp1.matchConstraintPercentHeight = (float) 0.8 - buttonHeight;
-            lp2.matchConstraintPercentHeight = (float) 0.2 - buttonHeight;
+            lp1.matchConstraintPercentHeight = (float) 0.8 - halfSubtractedHeight;
+            lp2.matchConstraintPercentHeight = (float) 0.2 - halfSubtractedHeight;
         } else {
             // perc < 0.2
-            lp1.matchConstraintPercentHeight = (float) 0.2 - buttonHeight;
-            lp2.matchConstraintPercentHeight = (float) 0.8 - buttonHeight;
+            lp1.matchConstraintPercentHeight = (float) 0.2 - halfSubtractedHeight;
+            lp2.matchConstraintPercentHeight = (float) 0.8 - halfSubtractedHeight;
         }
 
         view1.setLayoutParams(lp1);
