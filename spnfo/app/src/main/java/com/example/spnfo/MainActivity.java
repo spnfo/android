@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         gMap = googleMap;
 
         LatLng chicago = new LatLng(41.8781, -87.6298);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chicago, 13));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chicago, 15));
     }
 
 
