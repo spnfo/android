@@ -59,9 +59,9 @@ public class MainActivity extends AppCompatActivity
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
-        String[] mDataSet = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
+        String[] mDataSet = {"AAAAA", "BBBBB", "CCCCC", "DDDDD", "EEEEE", "FFFFF", "GGGGG", "HHHHH", "IIIII", "JJJJJ", "KKKKK", "LLLLL", "MMMMM", "NNNNNN", "OOOOO", "PPPPP", "QQQQQ", "RRRRR", "SSSSS", "TTTTT"};
 
-        mAdapter = new MyAdapter(mDataSet);
+        mAdapter = new RacerRowAdapter(mDataSet);
         recyclerView.setAdapter(mAdapter);
 
         Display display = getWindowManager().getDefaultDisplay();
