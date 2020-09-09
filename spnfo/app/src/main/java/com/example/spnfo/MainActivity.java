@@ -36,10 +36,6 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
@@ -55,14 +51,7 @@ public class MainActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
 
-        String[] mDataSet = {"AAAAA", "BBBBB", "CCCCC", "DDDDD", "EEEEE", "FFFFF", "GGGGG", "HHHHH", "IIIII", "JJJJJ", "KKKKK", "LLLLL", "MMMMM", "NNNNNN", "OOOOO", "PPPPP", "QQQQQ", "RRRRR", "SSSSS", "TTTTT"};
-
-        mAdapter = new RacerRowAdapter(mDataSet);
-        recyclerView.setAdapter(mAdapter);
 
         Display display = getWindowManager().getDefaultDisplay();
         screenSize = new Point();
@@ -87,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     public void onDragSelected(float y) {
         View view1 = findViewById(R.id.map);
-        View view2 = findViewById(R.id.my_recycler_view);
+        View view2 = findViewById(R.id.racer_list);
 
         ConstraintLayout.LayoutParams lp1 = (ConstraintLayout.LayoutParams) view1.getLayoutParams();
         ConstraintLayout.LayoutParams lp2 = (ConstraintLayout.LayoutParams) view2.getLayoutParams();

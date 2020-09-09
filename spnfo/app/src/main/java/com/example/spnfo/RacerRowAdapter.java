@@ -25,7 +25,7 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowAdapter.MyView
             racerPosition = v.findViewById(R.id.racer_position);
             racerTag = v.findViewById(R.id.racer_tag);
             racerSplit = v.findViewById(R.id.racer_split);
-            racerAvatar = v.findViewById(R.id.racer_avatar);
+            racerAvatar = v.findViewById(R.id.racer_avatar_image);
         }
     }
 
