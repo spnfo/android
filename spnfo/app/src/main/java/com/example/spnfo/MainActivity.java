@@ -16,18 +16,19 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.data.kml.KmlLayer;
+
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements OnMapReadyCallback, SpectatorSeparatorBarFragment.OnSpecBarChangeListener {
 
     Point screenSize;
-    Float halfSubtractedHeight = (float) 0.06;
+    Float halfSubtractedHeight = (float) 0.025;
     int navBarHeight;
-
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
     private GoogleMap gMap;
 
     @Override
@@ -62,6 +63,24 @@ public class MainActivity extends AppCompatActivity
             specBarFrag.setOnSpecBarChangeListener(this);
         }
 
+//        RacerSearchBarFragment searchBarFrag = (RacerSearchBarFragment) getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
+//        if (searchBarFrag != null) {
+//            searchBarFrag.setOnSearchChangeListener(this);
+//        }
+
+        ArrayList<String> mDataSet = new ArrayList<String>();
+        mDataSet.add("AAAAA");
+        mDataSet.add("BBBBB");
+        mDataSet.add("CCCCC");
+        mDataSet.add("DDDDD");
+        mDataSet.add("EEEEE");
+        mDataSet.add("FFFFF");
+        mDataSet.add("GGGGG");
+        mDataSet.add("HHHHH");
+
+        RacerListFragment racerListFragment = (RacerListFragment) getSupportFragmentManager().findFragmentById(R.id.racer_list);
+        racerListFragment.setDataSet(mDataSet);
+
     }
 
 
@@ -69,8 +88,17 @@ public class MainActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
 
-        LatLng chicago = new LatLng(41.8781, -87.6298);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chicago, 15));
+        LatLng chicago = new LatLng(43.707, -90.562);
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chicago, 13));
+
+        try {
+            KmlLayer layer = new KmlLayer(gMap, R.raw.wildcat, getApplicationContext());
+            layer.addLayerToMap();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -98,5 +126,10 @@ public class MainActivity extends AppCompatActivity
 
         view1.setLayoutParams(lp1);
         view2.setLayoutParams(lp2);
+    }
+
+
+    public void filterRacers(String searchStr) {
+
     }
 }

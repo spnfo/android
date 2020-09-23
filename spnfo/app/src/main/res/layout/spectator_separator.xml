@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/dark_white">
 
     <View
         android:id="@+id/view_action_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"/>
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
         android:id="@+id/separator_chkbx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
         app:layout_constraintLeft_toLeftOf="@id/view_action_bar"
-        app:layout_constraintTop_toTopOf="@id/view_action_bar"
-        app:layout_constraintBottom_toBottomOf="@id/view_action_bar" />
+        app:layout_constraintTop_toTopOf="@id/view_action_bar" />
 
     <ImageView
         android:id="@+id/slide_button"
@@ -27,47 +27,47 @@
         android:layout_height="match_parent"
         android:src="@drawable/drag_24"
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
-        app:layout_constraintTop_toTopOf="@id/view_action_bar"
         app:layout_constraintLeft_toLeftOf="@id/view_action_bar"
-        app:layout_constraintRight_toRightOf="@id/view_action_bar" />
+        app:layout_constraintRight_toRightOf="@id/view_action_bar"
+        app:layout_constraintTop_toTopOf="@id/view_action_bar" />
 
     <View
         android:id="@+id/data_switch_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginRight="15dp"
+        app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
         app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintWidth_percent="0.25"
         app:layout_constraintRight_toRightOf="@id/view_action_bar"
         app:layout_constraintTop_toTopOf="@id/view_action_bar"
-        app:layout_constraintBottom_toBottomOf="@id/view_action_bar"/>
+        app:layout_constraintWidth_percent="0.25" />
 
     <ImageView
         android:id="@+id/separator_map_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/map_marker_32"
-        app:layout_constraintTop_toTopOf="@id/view_action_bar"
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
-        app:layout_constraintLeft_toLeftOf="@id/data_switch_view" />
+        app:layout_constraintLeft_toLeftOf="@id/data_switch_view"
+        app:layout_constraintTop_toTopOf="@id/view_action_bar" />
 
     <Switch
         android:id="@+id/data_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="@id/data_switch_view"
+        app:layout_constraintBottom_toBottomOf="@id/data_switch_view"
         app:layout_constraintLeft_toLeftOf="@id/data_switch_view"
-        app:layout_constraintTop_toTopOf="@id/data_switch_view"
-        app:layout_constraintBottom_toBottomOf="@id/data_switch_view" />
+        app:layout_constraintRight_toRightOf="@id/data_switch_view"
+        app:layout_constraintTop_toTopOf="@id/data_switch_view" />
 
     <ImageView
         android:id="@+id/separator_chart_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/chart_64"
-        app:layout_constraintTop_toTopOf="@id/view_action_bar"
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
-        app:layout_constraintRight_toRightOf="@id/data_switch_view" />
+        app:layout_constraintRight_toRightOf="@id/data_switch_view"
+        app:layout_constraintTop_toTopOf="@id/view_action_bar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

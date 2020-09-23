@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class RacerListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
+    private ArrayList<String> mDataSet = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,11 +27,24 @@ public class RacerListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        String[] mDataSet = {"AAAAA", "BBBBB", "CCCCC", "DDDDD", "EEEEE", "FFFFF", "GGGGG", "HHHHH", "IIIII", "JJJJJ", "KKKKK", "LLLLL", "MMMMM", "NNNNNN", "OOOOO", "PPPPP", "QQQQQ", "RRRRR", "SSSSS", "TTTTT"};
-
-        mAdapter = new RacerRowAdapter(mDataSet);
-        recyclerView.setAdapter(mAdapter);
-
         return v;
+    }
+
+
+    public void setDataSet(ArrayList<String> ds) {
+        mDataSet = ds;
+
+        mAdapter = new RacerRowAdapter(getContext());
+        recyclerView.setAdapter(mAdapter);
+    }
+
+
+    public void updateDataSet() {
+
+    }
+
+
+    public void filterDataSet() {
+
     }
 }

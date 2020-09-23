@@ -8,4 +8,5 @@
     <color name="lightGray">#DEDEDE</color>
     <color name="backgroundPurple">#8a016a</color>
     <color name="white">#ffffff</color>
+    <color name="dark_white">#FBFBFB</color>
 </resources>
