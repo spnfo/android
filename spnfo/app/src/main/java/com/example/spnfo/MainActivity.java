@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity
     int navBarHeight;
     private GoogleMap gMap;
 
+    private static final String[] TAGS = new String[]{
+            "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF"
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,18 +72,6 @@ public class MainActivity extends AppCompatActivity
 //            searchBarFrag.setOnSearchChangeListener(this);
 //        }
 
-        ArrayList<String> mDataSet = new ArrayList<String>();
-        mDataSet.add("AAAAA");
-        mDataSet.add("BBBBB");
-        mDataSet.add("CCCCC");
-        mDataSet.add("DDDDD");
-        mDataSet.add("EEEEE");
-        mDataSet.add("FFFFF");
-        mDataSet.add("GGGGG");
-        mDataSet.add("HHHHH");
-
-        RacerListFragment racerListFragment = (RacerListFragment) getSupportFragmentManager().findFragmentById(R.id.racer_list);
-        racerListFragment.setDataSet(mDataSet);
 
     }
 

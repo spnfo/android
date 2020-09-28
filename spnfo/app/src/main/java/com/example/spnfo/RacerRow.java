@@ -1,7 +1,5 @@
 package com.example.spnfo;
 
-import android.util.Log;
-
 import java.util.Arrays;
 import java.util.Objects;
 
