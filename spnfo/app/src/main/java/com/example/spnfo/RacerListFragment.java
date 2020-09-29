@@ -19,10 +19,10 @@ public class RacerListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mAdapter;
+    private RacerRowAdapter mAdapter;
     private List<RacerRow> mModels;
 
-    private static final String[] TAGS = new String[]{ "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF" };
+    private static final String[] TAGS = new String[]{ "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF", "GGGGGG", "HHHHHH", "IIIIII", "JJJJJJ" };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class RacerListFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new RacerRowAdapter(getContext());
-
+        mRecyclerView.setAdapter(mAdapter);
 
 //        recyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
 //        mLayoutManager = new LinearLayoutManager(getContext());
@@ -43,7 +43,7 @@ public class RacerListFragment extends Fragment {
             mModels.add(new RacerRow(tag));
         }
 
-
+        mAdapter.add(mModels);
 
         return v;
     }

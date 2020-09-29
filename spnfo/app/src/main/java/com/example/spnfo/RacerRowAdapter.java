@@ -65,9 +65,11 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     });
 
     private LayoutInflater mInflater;
+    private Context mCtx;
 
     public RacerRowAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
+        mCtx = context;
     }
 
     @Override
@@ -79,6 +81,10 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     @Override
     public void onBindViewHolder(RacerRowViewHolder holder, int position) {
         RacerRow model = mSortedList.get(position);
+
+        if (position % 2 == 1)
+            holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.white, null));
+
         holder.bind(model);
     }
 
