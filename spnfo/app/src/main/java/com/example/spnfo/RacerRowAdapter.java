@@ -1,10 +1,20 @@
 package com.example.spnfo;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.renderscript.ScriptGroup;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -66,6 +76,8 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
 
     private LayoutInflater mInflater;
     private Context mCtx;
+    private OnRacerRowChangeListener racerRowChangeCallback;
+    private ViewGroup mParent;
 
     public RacerRowAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -75,15 +87,45 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     @Override
     public RacerRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RacerRowBinding binding = RacerRowBinding.inflate(mInflater, parent, false);
+        mParent = parent;
         return new RacerRowViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(RacerRowViewHolder holder, int position) {
-        RacerRow model = mSortedList.get(position);
+    public void onBindViewHolder(final RacerRowViewHolder holder, int position) {
+        final RacerRow model = mSortedList.get(position);
 
         if (position % 2 == 1)
             holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.white, null));
+
+        CheckBox cb = (CheckBox) holder.itemView.findViewById(R.id.racer_checkbox);
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                racerRowChangeCallback.onCheckBoxChanged(model.getTag(), isChecked);
+            }
+        });
+
+        ConstraintLayout bannerConstraintLayout = holder.itemView.findViewById(R.id.racer_row_constraint_layout);
+        bannerConstraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ConstraintLayout dataDrawerConstraintLayout = holder.itemView.findViewById(R.id.data_drawer_constraint_layout);
+                final int curVisibility = dataDrawerConstraintLayout.getVisibility();
+                Transition transition = new Fade();
+                transition.setDuration(600);
+                transition.addTarget(holder.itemView.findViewById(R.id.data_drawer_constraint_layout));
+
+                TransitionManager.beginDelayedTransition(mParent, transition);
+
+                if (curVisibility == 8) {
+                    dataDrawerConstraintLayout.setVisibility(View.VISIBLE);
+                } else {
+                    dataDrawerConstraintLayout.setVisibility(View.GONE);
+                }
+
+            }
+        });
 
         holder.bind(model);
     }
@@ -91,6 +133,16 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     @Override
     public int getItemCount() {
         return mSortedList.size();
+    }
+
+    public void checkAll(boolean checkedTrue) {
+        mSortedList.beginBatchedUpdates();
+        for (int i = 0; i < mSortedList.size(); i++) {
+            RacerRow tempModel = mSortedList.get(i);
+            tempModel.setChecked(checkedTrue);
+            mSortedList.updateItemAt(i, tempModel);
+        }
+        mSortedList.endBatchedUpdates();
     }
 
     public void add(RacerRow model) {
@@ -114,14 +166,15 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     }
 
     public void replaceAll(List<RacerRow> models) {
-        mSortedList.beginBatchedUpdates();
-        for (int i = mSortedList.size() - 1; i >= 0; i--) {
-            RacerRow model = mSortedList.get(i);
-            if (!models.contains(model)) {
-                mSortedList.remove(model);
-            }
-        }
-        mSortedList.addAll(models);
-        mSortedList.endBatchedUpdates();
+        mSortedList.replaceAll(models);
     }
+
+    public void setOnRacerRowChangeListener(OnRacerRowChangeListener callback) {
+        racerRowChangeCallback = callback;
+    }
+
+    public interface OnRacerRowChangeListener {
+        public void onCheckBoxChanged(String tag, Boolean checked);
+    }
+
 }

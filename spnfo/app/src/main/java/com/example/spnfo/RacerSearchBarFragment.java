@@ -3,6 +3,7 @@ package com.example.spnfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class RacerSearchBarFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (searchChangeCallback != null)
-                    searchChangeCallback.filterRacers(et.getText().toString());
+                    searchChangeCallback.filterDataset(et.getText().toString());
             }
 
             @Override
@@ -46,6 +47,6 @@ public class RacerSearchBarFragment extends Fragment {
     }
 
     public interface OnSearchChangeListener {
-        public void filterRacers(String searchStr);
+        public void filterDataset(String searchStr);
     }
 }

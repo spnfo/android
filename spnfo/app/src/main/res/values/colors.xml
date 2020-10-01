@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- SPNFO colors -->
+    <color name="spnfoPurple">#8f60a6</color>
+    <color name="spnfoOrange">#ec994b</color>
+    <color name="spnfoYellow">#f1d265</color>
+    <!--   -->
     <color name="colorPrimary">#8a016a</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#03DAC5</color>

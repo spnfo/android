@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+
 import androidx.fragment.app.Fragment;
 
 public class SpectatorSeparatorBarFragment extends Fragment {
@@ -49,6 +52,14 @@ public class SpectatorSeparatorBarFragment extends Fragment {
 
         });
 
+        CheckBox globalCheck = v.findViewById(R.id.separator_checkbox);
+        globalCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                specBarChangeCallback.onGlobalCheck(isChecked);
+            }
+        });
+
         return v;
     }
 
@@ -58,5 +69,6 @@ public class SpectatorSeparatorBarFragment extends Fragment {
 
     public interface OnSpecBarChangeListener {
         public void onDragSelected(float position);
+        public void onGlobalCheck(Boolean isChecked);
     }
 }

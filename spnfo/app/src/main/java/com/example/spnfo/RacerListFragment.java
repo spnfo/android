@@ -1,6 +1,7 @@
 package com.example.spnfo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,8 @@ import com.example.spnfo.databinding.RacerRowBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RacerListFragment extends Fragment {
+public class RacerListFragment extends Fragment implements
+        RacerSearchBarFragment.OnSearchChangeListener, RacerRowAdapter.OnRacerRowChangeListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -32,27 +34,44 @@ public class RacerListFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mAdapter = new RacerRowAdapter(getContext());
+        mAdapter.setOnRacerRowChangeListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
-//        recyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
-//        mLayoutManager = new LinearLayoutManager(getContext());
-//        recyclerView.setLayoutManager(mLayoutManager);
-
         mModels = new ArrayList<>();
-        for (String tag : TAGS) {
-            mModels.add(new RacerRow(tag));
+        for (int i = 0; i < TAGS.length; i++) {
+            mModels.add(new RacerRow(TAGS[i], i+1));
         }
 
         mAdapter.add(mModels);
 
+        RacerSearchBarFragment rsbf = (RacerSearchBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
+        if (rsbf != null) {
+            rsbf.setOnSearchChangeListener(this);
+        }
+
         return v;
     }
 
-    public void updateDataSet() {
-
+    public void globalCheck(Boolean checkTrue) {
+        mAdapter.checkAll(checkTrue);
     }
 
-    public void filterDataSet() {
+    public void onCheckBoxChanged(String tag, Boolean isChecked) {
+        ((MainActivity) getActivity()).onCheckSelected(tag, isChecked);
+    }
 
+    public void filterDataset(String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<RacerRow> filteredModelList = new ArrayList<>();
+        for (RacerRow model : mModels) {
+            final String compareText = model.getTag().toLowerCase();
+            if (compareText.contains(lowerCaseQuery)) {
+                filteredModelList.add(model);
+            }
+        }
+
+        mAdapter.replaceAll(filteredModelList);
+        mRecyclerView.scrollToPosition(0);
     }
 }

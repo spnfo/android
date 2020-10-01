@@ -11,9 +11,18 @@ public class RacerRow {
     private float[] mGeoLocation;
     private float mTimeDeficit;
 
-    public RacerRow(String tag) {
+    public RacerRow(String tag, int position) {
         mChecked = false;
         mTag = tag;
+        mPosition = position;
+    }
+
+    public Boolean getChecked() {
+        return mChecked;
+    }
+
+    public void setChecked(Boolean newCheck) {
+        mChecked = newCheck;
     }
 
     public String getTag() {

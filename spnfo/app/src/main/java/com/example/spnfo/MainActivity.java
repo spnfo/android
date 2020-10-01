@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
@@ -23,17 +24,13 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
-        implements OnMapReadyCallback, SpectatorSeparatorBarFragment.OnSpecBarChangeListener {
+public class MainActivity extends AppCompatActivity implements SpectatorSeparatorBarFragment.OnSpecBarChangeListener {
 
     Point screenSize;
-    Float halfSubtractedHeight = (float) 0.025;
+    Float halfSubtractedHeight = (float) 0.06;
     int navBarHeight;
     private GoogleMap gMap;
-
-    private static final String[] TAGS = new String[]{
-            "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF"
-    };
+    private RacerListFragment rlf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +50,6 @@ public class MainActivity extends AppCompatActivity
             navBarHeight = resources.getDimensionPixelSize(resourceId);
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-
-
         Display display = getWindowManager().getDefaultDisplay();
         screenSize = new Point();
         display.getSize(screenSize);
@@ -67,32 +59,19 @@ public class MainActivity extends AppCompatActivity
             specBarFrag.setOnSpecBarChangeListener(this);
         }
 
-//        RacerSearchBarFragment searchBarFrag = (RacerSearchBarFragment) getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
-//        if (searchBarFrag != null) {
-//            searchBarFrag.setOnSearchChangeListener(this);
-//        }
-
-
+        rlf = (RacerListFragment) getSupportFragmentManager().findFragmentById(R.id.racer_list);
     }
 
+    public void onCheckSelected(String tag, Boolean isChecked) {
+        Log.v("CHECKTAG", tag);
+        Log.v("CHECKED", isChecked.toString());
+    }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        gMap = googleMap;
-
-        LatLng chicago = new LatLng(43.707, -90.562);
-        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(chicago, 13));
-
-        try {
-            KmlLayer layer = new KmlLayer(gMap, R.raw.wildcat, getApplicationContext());
-            layer.addLayerToMap();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void onGlobalCheck(Boolean isChecked) {
+        if (rlf != null) {
+            rlf.globalCheck(isChecked);
         }
     }
-
 
     public void onDragSelected(float y) {
         View view1 = findViewById(R.id.map);
@@ -120,8 +99,4 @@ public class MainActivity extends AppCompatActivity
         view2.setLayoutParams(lp2);
     }
 
-
-    public void filterRacers(String searchStr) {
-
-    }
 }

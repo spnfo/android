@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-<!--    <fragment-->
-<!--        android:id="@+id/racer_search_bar_fragment"-->
-<!--        android:name="com.example.spnfo.RacerSearchBarFragment"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintHeight_percent="0.07"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/map" />-->
-
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/racer_search_bar_fragment"
+        android:name="com.example.spnfo.RacerSearchBarFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/map_holder" />
+
+    <fragment
+        android:id="@+id/map_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:name="com.example.spnfo.RaceMapFragment"
+        app:layout_constraintHeight_percent="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/racer_search_bar_fragment" />
 
     <fragment
         android:id="@+id/spectator_bar"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintTop_toBottomOf="@id/map"
+        app:layout_constraintTop_toBottomOf="@id/map_holder"
         app:layout_constraintBottom_toTopOf="@id/racer_list" />
 
     <fragment
@@ -38,7 +38,7 @@
         android:name="com.example.spnfo.RacerListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.47"
+        app:layout_constraintHeight_percent="0.44"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
