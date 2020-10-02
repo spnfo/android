@@ -1,12 +1,16 @@
 package com.example.spnfo;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.SystemClock;
 import android.renderscript.ScriptGroup;
 import android.transition.Fade;
+import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
@@ -92,7 +97,14 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final RacerRowViewHolder holder, int position) {
+    public void onViewRecycled(@NonNull RacerRowViewHolder holder) {
+        holder.mCheckBox.setOnCheckedChangeListener(null);
+//        ((CheckBox) holder.itemView.findViewById(R.id.racer_checkbox)).setOnCheckedChangeListener(null);
+        super.onViewRecycled(holder);
+    }
+
+    @Override
+    public void onBindViewHolder(final RacerRowViewHolder holder, final int position) {
         final RacerRow model = mSortedList.get(position);
 
         if (position % 2 == 1)
@@ -107,22 +119,25 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
         });
 
         ConstraintLayout bannerConstraintLayout = holder.itemView.findViewById(R.id.racer_row_constraint_layout);
+
         bannerConstraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ConstraintLayout dataDrawerConstraintLayout = holder.itemView.findViewById(R.id.data_drawer_constraint_layout);
-                final int curVisibility = dataDrawerConstraintLayout.getVisibility();
-                Transition transition = new Fade();
-                transition.setDuration(600);
+
+                Transition transition = new Slide(Gravity.BOTTOM);
+                transition.setDuration(300);
                 transition.addTarget(holder.itemView.findViewById(R.id.data_drawer_constraint_layout));
 
                 TransitionManager.beginDelayedTransition(mParent, transition);
 
-                if (curVisibility == 8) {
+                if (dataDrawerConstraintLayout.getVisibility() == View.GONE) {
                     dataDrawerConstraintLayout.setVisibility(View.VISIBLE);
                 } else {
                     dataDrawerConstraintLayout.setVisibility(View.GONE);
                 }
+
+                notifyItemChanged(position);
 
             }
         });
@@ -143,6 +158,8 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
             mSortedList.updateItemAt(i, tempModel);
         }
         mSortedList.endBatchedUpdates();
+
+        notifyDataSetChanged();
     }
 
     public void add(RacerRow model) {

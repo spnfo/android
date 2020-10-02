@@ -12,7 +12,6 @@ public class RacerRow {
     private float mTimeDeficit;
 
     public RacerRow(String tag, int position) {
-        mChecked = false;
         mTag = tag;
         mPosition = position;
     }

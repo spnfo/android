@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
     }
 
     public void onDragSelected(float y) {
-        View view1 = findViewById(R.id.map);
+        View view1 = findViewById(R.id.map_holder);
         View view2 = findViewById(R.id.racer_list);
 
         ConstraintLayout.LayoutParams lp1 = (ConstraintLayout.LayoutParams) view1.getLayoutParams();
