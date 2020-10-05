@@ -35,6 +35,7 @@ public class RacerListFragment extends Fragment implements
         View v = inflater.inflate(R.layout.racer_list_fragment, container, false);
         mRecyclerView = v.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setItemViewCacheSize(0);
 
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 

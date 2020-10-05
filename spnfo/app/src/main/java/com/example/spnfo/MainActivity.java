@@ -63,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
     }
 
     public void onCheckSelected(String tag, Boolean isChecked) {
-        Log.v("CHECKTAG", tag);
-        Log.v("CHECKED", isChecked.toString());
+
     }
 
     public void onGlobalCheck(Boolean isChecked) {

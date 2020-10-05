@@ -93,30 +93,44 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     public RacerRowViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RacerRowBinding binding = RacerRowBinding.inflate(mInflater, parent, false);
         mParent = parent;
-        return new RacerRowViewHolder(binding);
+        return new RacerRowViewHolder(binding.getRoot(), binding);
     }
 
     @Override
     public void onViewRecycled(@NonNull RacerRowViewHolder holder) {
-        holder.mCheckBox.setOnCheckedChangeListener(null);
-//        ((CheckBox) holder.itemView.findViewById(R.id.racer_checkbox)).setOnCheckedChangeListener(null);
-        super.onViewRecycled(holder);
+//        Log.v("RECYCLED", holder.mTag.getText().toString());
     }
+
+//    @Override
+//    public void onViewAttachedToHolder(RacerRowViewHolder holder, int position) {
+//
+//    }
 
     @Override
     public void onBindViewHolder(final RacerRowViewHolder holder, final int position) {
         final RacerRow model = mSortedList.get(position);
+        holder.bind(model);
 
-        if (position % 2 == 1)
+        if (model.getPositionInt() % 2 == 1) {
             holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.white, null));
+        } else {
+            holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.lightGray, null));
+        }
 
-        CheckBox cb = (CheckBox) holder.itemView.findViewById(R.id.racer_checkbox);
-        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                racerRowChangeCallback.onCheckBoxChanged(model.getTag(), isChecked);
-            }
-        });
+////        Log.v("BINDVIEWHOLDER", holder.mTag.getText().toString());
+////        holder.mCheckBox.setOnCheckedChangeListener(null);
+//        holder.mBinding.racerCheckbox.setOnCheckedChangeListener(null);
+////        holder.mCheckBox.setChecked(model.getChecked());
+//        holder.mBinding.racerCheckbox.setChecked(model.getChecked());
+//
+//        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                racerRowChangeCallback.onCheckBoxChanged(model.getTag(), isChecked);
+////                holder.mCheckBox.setChecked(isChecked);
+//                holder.mBinding.racerCheckbox.setChecked(isChecked);
+//            }
+//        });
 
         ConstraintLayout bannerConstraintLayout = holder.itemView.findViewById(R.id.racer_row_constraint_layout);
 

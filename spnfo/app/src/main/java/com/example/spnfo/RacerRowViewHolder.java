@@ -1,22 +1,30 @@
 package com.example.spnfo;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.spnfo.databinding.RacerRowBinding;
 
 public class RacerRowViewHolder extends RecyclerView.ViewHolder {
 
-    private final RacerRowBinding mBinding;
+    public RacerRowBinding mBinding;
     public CheckBox mCheckBox;
+    public TextView mTag;
 
-    public RacerRowViewHolder(RacerRowBinding binding) {
+    public RacerRowViewHolder(View rowView, RacerRowBinding binding) {
         super(binding.getRoot());
         mBinding = binding;
         mCheckBox = binding.racerCheckbox;
+        mTag = binding.racerTag;
+
+        Log.v("BINDING", binding.racerTag.toString());
     }
 
     public void bind(RacerRow item) {
         mBinding.setModel(item);
+        mBinding.executePendingBindings();
     }
 }
