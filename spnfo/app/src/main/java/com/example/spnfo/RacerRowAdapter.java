@@ -117,6 +117,12 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
             holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.lightGray, null));
         }
 
+        if (model.getExpanded()) {
+            holder.itemView.findViewById(R.id.data_drawer_constraint_layout).setVisibility(View.VISIBLE);
+        } else {
+            holder.itemView.findViewById(R.id.data_drawer_constraint_layout).setVisibility(View.GONE);
+        }
+
 ////        Log.v("BINDVIEWHOLDER", holder.mTag.getText().toString());
 ////        holder.mCheckBox.setOnCheckedChangeListener(null);
 //        holder.mBinding.racerCheckbox.setOnCheckedChangeListener(null);
@@ -147,8 +153,10 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
 
                 if (dataDrawerConstraintLayout.getVisibility() == View.GONE) {
                     dataDrawerConstraintLayout.setVisibility(View.VISIBLE);
+                    model.setExpanded(true);
                 } else {
                     dataDrawerConstraintLayout.setVisibility(View.GONE);
+                    model.setExpanded(false);
                 }
 
                 notifyItemChanged(position);

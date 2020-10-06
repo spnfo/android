@@ -19,8 +19,6 @@ public class RacerRowViewHolder extends RecyclerView.ViewHolder {
         mBinding = binding;
         mCheckBox = binding.racerCheckbox;
         mTag = binding.racerTag;
-
-        Log.v("BINDING", binding.racerTag.toString());
     }
 
     public void bind(RacerRow item) {

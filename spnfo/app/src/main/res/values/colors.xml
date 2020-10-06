@@ -16,4 +16,5 @@
     <color name="backgroundPurple">#8a016a</color>
     <color name="white">#ffffff</color>
     <color name="dark_white">#FBFBFB</color>
+    <color name="black">#000000</color>
 </resources>

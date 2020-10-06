@@ -14,20 +14,25 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.example.spnfo.databinding.RacerRowBinding;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RacerListFragment extends Fragment implements
-        RacerSearchBarFragment.OnSearchChangeListener, RacerRowAdapter.OnRacerRowChangeListener {
+public class RacerListFragment extends Fragment implements RacerRowAdapter.OnRacerRowChangeListener {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private RacerRowAdapter mAdapter;
-    private List<RacerRow> mModels;
 
-    private static final String[] TAGS = new String[]{ "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF", "GGGGGG", "HHHHHH", "IIIIII", "JJJJJJ",
-                                                       "KKKKKK", "LLLLLL", "MMMMMM", "NNNNNN", "OOOOOO", "PPPPPP", "QQQQQQ", "RRRRRR", "SSSSSS", "TTTTTT",
-                                                       "UUUUUU", "VVVVVV", "WWWWWW", "XXXXXX", "YYYYYY", "ZZZZZZ" };
+//    private static final String[] TAGS = new String[]{ "AAAAAA", "BBBBBB", "CCCCCC", "DDDDDD", "EEEEEE", "FFFFFF", "GGGGGG", "HHHHHH", "IIIIII", "JJJJJJ",
+//                                                       "KKKKKK", "LLLLLL", "MMMMMM", "NNNNNN", "OOOOOO", "PPPPPP", "QQQQQQ", "RRRRRR", "SSSSSS", "TTTTTT",
+//                                                       "UUUUUU", "VVVVVV", "WWWWWW", "XXXXXX", "YYYYYY", "ZZZZZZ" };
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,23 +44,21 @@ public class RacerListFragment extends Fragment implements
 
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        mAdapter = new RacerRowAdapter(getContext());
-        mAdapter.setOnRacerRowChangeListener(this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        mModels = new ArrayList<>();
-        for (int i = 0; i < TAGS.length; i++) {
-            mModels.add(new RacerRow(TAGS[i], i+1));
-        }
-
-        mAdapter.add(mModels);
-
-        RacerSearchBarFragment rsbf = (RacerSearchBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
-        if (rsbf != null) {
-            rsbf.setOnSearchChangeListener(this);
-        }
+//        RacerSearchBarFragment rsbf = (RacerSearchBarFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
+//        if (rsbf != null) {
+//            rsbf.setOnSearchChangeListener(this);
+//        }
 
         return v;
+    }
+
+    public void setAdapter(RacerRowAdapter adapter) {
+        mAdapter = adapter;
+        mAdapter.setOnRacerRowChangeListener(this);
+
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     public void globalCheck(Boolean checkTrue) {
@@ -63,21 +66,11 @@ public class RacerListFragment extends Fragment implements
     }
 
     public void onCheckBoxChanged(String tag, Boolean isChecked) {
+        Log.v("CHECKED", "here");
         ((MainActivity) getActivity()).onCheckSelected(tag, isChecked);
     }
 
-    public void filterDataset(String query) {
-        final String lowerCaseQuery = query.toLowerCase();
-
-        final List<RacerRow> filteredModelList = new ArrayList<>();
-        for (RacerRow model : mModels) {
-            final String compareText = model.getTag().toLowerCase();
-            if (compareText.contains(lowerCaseQuery)) {
-                filteredModelList.add(model);
-            }
-        }
-
-        mAdapter.replaceAll(filteredModelList);
+    public void filterDataset(ArrayList<RacerRow> filterdModels) {
         mRecyclerView.scrollToPosition(0);
     }
 }

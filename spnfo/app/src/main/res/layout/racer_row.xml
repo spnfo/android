@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" >
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
     <data>
         <variable
             name="model"
@@ -13,7 +14,6 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
 
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/racer_row_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp" >
@@ -42,21 +42,24 @@
                 android:id="@+id/racer_position"
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:fontFamily="@font/rubik_light_italic"
-                android:textSize="16sp"
+                android:gravity="center"
                 android:text="@{model.position}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/racer_checkbox"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintRight_toLeftOf="@id/racer_avatar"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/racer_avatar"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="0dp"
                 app:cardCornerRadius="15dp"
                 app:layout_constraintLeft_toRightOf="@id/racer_position"
+                app:layout_constraintRight_toLeftOf="@id/racer_tag"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" >
 
@@ -76,31 +79,32 @@
 
             <TextView
                 android:id="@+id/racer_tag"
-                android:layout_width="120dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="70dp"
-                android:gravity="start"
-                android:textSize="20sp"
-                android:fontFamily="@font/rubik"
+                android:fontFamily="@font/fira_mono_medium"
+                android:gravity="center"
                 android:text="@{model.tag}"
+                android:textColor="@color/black"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="parent"
                 app:layout_constraintRight_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3" />
 
             <TextView
                 android:id="@+id/racer_split"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
+                android:fontFamily="@font/fira_mono"
                 android:gravity="end"
-                android:fontFamily="@font/rubik_light"
-                android:textSize="16sp"
                 android:text="@{model.timeDeficit}"
-                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="16sp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/racer_tag"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/racer_tag" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -110,6 +114,19 @@
             android:layout_height="100dp"
             android:background="@color/spnfoDarkPurple"
             android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/tv_racer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/rubik_light"
+                android:text="@{model.name}"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
