@@ -3,14 +3,18 @@ package com.example.spnfo;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,17 +22,26 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.data.kml.KmlLayer;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements SpectatorSeparatorBarFragment.OnSpecBarChangeListener,
-                                                                RacerSearchBarFragment.OnSearchChangeListener {
+                                                                RacerSearchBarFragment.OnSearchChangeListener,
+                                                                RacerRowAdapter.OnRacerRowChangeListener {
 
     private static final String[] TAGS = new String[]{ "CVDSH", "VLVRD", "BERNL", "FROOM", "SAGAN", "VDPOL", "QNTNA", "VANAT", "KRSTF", "VVANI", "PGCAR",
             "PORTE", "LANDA", "ENRIC", "LOPEZ", "TOMDU", "RURAN", "YATES", "CRUSO", "MARTN", "CARPZ", "BARGL" };
@@ -41,16 +54,19 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
     Point screenSize;
     Float halfSubtractedHeight = (float) 0.06;
     int navBarHeight;
-    private GoogleMap gMap;
     private RacerListFragment rlf;
     private ArrayList<RacerRow> mModels;
     private RacerRowAdapter mAdapter;
+    private HashSet<String> monitorTags;
+    private RaceMapFragment mRaceMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        monitorTags = new HashSet<String>();
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -83,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
                 racerData.put("tag", TAGS[i]);
                 racerData.put("position", i+1);
                 racerData.put("expanded", false);
+                racerData.put("timeDeficit", 0.0);
                 racerData.put("name", NAMES[i]);
 
                 mModels.add(new RacerRow(racerData));
@@ -94,15 +111,95 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
 
         mAdapter = new RacerRowAdapter(getApplicationContext());
         mAdapter.add(mModels);
+        mAdapter.setOnRacerRowChangeListener(this);
 
         rlf.setAdapter(mAdapter);
 
+        mRaceMapFragment = (RaceMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_holder);
+
+        // TODO: make this a rest call
         Bundle racerListBundle = new Bundle();
         racerListBundle.putParcelableArrayList("models", mModels);
+
+        Log.v("WSMESSAGE", "connecting...");
+        WebSocketFactory factory = new WebSocketFactory();
+        try {
+            final WebSocket ws = factory.createSocket("ws://server.spnfo.com?id=1234", 5000);
+            ws.addListener(new WebSocketAdapter() {
+                @Override
+                public void onTextMessage(WebSocket websocket, String message) throws Exception {
+                    JSONArray jsonArray = new JSONArray(message);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject newDataObject = jsonArray.getJSONObject(i);
+                        RacerRow curRow = findRacerRow(newDataObject.getString("tag"));
+                        curRow.update(newDataObject);
+                    }
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateMapMonitorTags();
+                        }
+                    });
+                }
+            });
+
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ws.connect();
+                    } catch (WebSocketException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void onCheckSelected(String tag, Boolean isChecked) {
+    public RacerRow findRacerRow(String queryTag) {
+        for (RacerRow row : mModels) {
+            if (row.getTag().equals(queryTag)) {
+                return row;
+            }
+        }
+        return null;
+    }
 
+//    public void onCheckSelected(String tag, Boolean isChecked) {
+////        Log.v("CHECKED", tag);
+//        if (isChecked) {
+//            monitorTags.add(tag);
+//        } else {
+//            monitorTags.remove(tag);
+//        }
+//        //updateMapMonitorTags();
+//    }
+
+
+    public void onCheckBoxChanged(String tag, Boolean isChecked) {
+        if (isChecked) {
+            monitorTags.add(tag);
+            updateMapMonitorTags();
+        } else {
+            if (mRaceMapFragment != null) {
+                mRaceMapFragment.removeTag(tag);
+                monitorTags.remove(tag);
+            }
+        }
+    }
+
+    public void updateMapMonitorTags() {
+        for (RacerRow rr : mModels) {
+            if (monitorTags.contains(rr.getTag())) {
+                if (mRaceMapFragment != null) {
+                    mRaceMapFragment.manageTag(rr.getTag(), rr.getGeoLocation());
+                }
+            }
+        }
     }
 
     public void onGlobalCheck(Boolean isChecked) {

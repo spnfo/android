@@ -1,11 +1,16 @@
 package com.example.spnfo;
 
 import android.graphics.Camera;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,17 +21,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.data.kml.KmlLayer;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class RaceMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraIdleListener {
 
     private GoogleMap gMap;
     private MapScaleView scaleView;
+    private HashMap<String, Marker> mMarkers;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +46,7 @@ public class RaceMapFragment extends Fragment implements OnMapReadyCallback, Goo
         View v = inflater.inflate(R.layout.race_map_fragment, container, false);
 
         scaleView = v.findViewById(R.id.scaleView);
+        mMarkers = new HashMap<>();
 
         return v;
     }
@@ -80,5 +93,38 @@ public class RaceMapFragment extends Fragment implements OnMapReadyCallback, Goo
     public void onCameraIdle() {
         CameraPosition cameraPosition = gMap.getCameraPosition();
         scaleView.update(cameraPosition.zoom, cameraPosition.target.latitude);
+    }
+
+    public void manageTag(String tagName, Double[] geoLocation) {
+        if (mMarkers.containsKey(tagName)) {
+            updateTag(tagName, geoLocation);
+        } else {
+            addTag(tagName, geoLocation);
+        }
+    }
+
+    public void addTag(String tagName, Double[] geoLocation) {
+        LatLng markerPos = new LatLng(geoLocation[0], geoLocation[1]);
+        Marker m = gMap.addMarker(new MarkerOptions().position(markerPos).title(tagName));
+        mMarkers.put(tagName, m);
+    }
+
+    public void updateTag(final String tagName, final Double[] geoLocation) {
+        Handler updateMapMarkerHandler = new Handler(getContext().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                mMarkers.get(tagName).setPosition(new LatLng(geoLocation[0], geoLocation[1]));
+            }
+        };
+        updateMapMarkerHandler.post(myRunnable);
+    }
+
+    public void removeTag(String tagName) {
+        if (mMarkers.containsKey(tagName)) {
+            Marker m = mMarkers.get(tagName);
+            m.remove();
+            mMarkers.remove(tagName);
+        }
     }
 }

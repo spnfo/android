@@ -19,6 +19,9 @@ android {
     }
 
     buildTypes {
+        customDebugType {
+            debuggable true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -27,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.neovisionaries:nv-websocket-client:2.10'
     implementation 'com.github.pengrad:mapscaleview:1.6.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation fileTree(dir: "libs", include: ["*.jar"])

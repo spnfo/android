@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SPNFO</string>
+
+    <!-- Strings for Race View -->
+    <string name="race_view_lap_label">Lap</string>
+    <string name="race_view_power_label">Power</string>
+    <string name="race_view_power_label_unit">w</string>
+    <string name="race_view_hr_label">HR</string>
+    <string name="race_view_hr_label_unit">bpm</string>
+    <string name="race_view_elevation_label">Elevation</string>
+    <string name="race_view_elevation_label_unit">m</string>
+    <string name="race_view_speed_label">Speed</string>
+    <string name="race_view_speed_label_unit">kph</string>
+    <string name="race_view_cadence_label">Cadence</string>
+    <string name="race_view_cadence_label_unit">rpm</string>
+
 </resources>

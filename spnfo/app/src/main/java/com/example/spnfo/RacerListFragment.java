@@ -22,7 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RacerListFragment extends Fragment implements RacerRowAdapter.OnRacerRowChangeListener {
+public class RacerListFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -54,7 +54,6 @@ public class RacerListFragment extends Fragment implements RacerRowAdapter.OnRac
 
     public void setAdapter(RacerRowAdapter adapter) {
         mAdapter = adapter;
-        mAdapter.setOnRacerRowChangeListener(this);
 
         if (mRecyclerView != null) {
             mRecyclerView.setAdapter(mAdapter);
@@ -65,10 +64,10 @@ public class RacerListFragment extends Fragment implements RacerRowAdapter.OnRac
         mAdapter.checkAll(checkTrue);
     }
 
-    public void onCheckBoxChanged(String tag, Boolean isChecked) {
-        Log.v("CHECKED", "here");
-        ((MainActivity) getActivity()).onCheckSelected(tag, isChecked);
-    }
+//    public void onCheckBoxChanged(String tag, Boolean isChecked) {
+//        Log.v("CHECKED", "here");
+//        ((MainActivity) getActivity()).onCheckSelected(tag, isChecked);
+//    }
 
     public void filterDataset(ArrayList<RacerRow> filterdModels) {
         mRecyclerView.scrollToPosition(0);

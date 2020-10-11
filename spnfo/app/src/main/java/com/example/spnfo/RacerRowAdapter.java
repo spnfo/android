@@ -10,6 +10,7 @@ import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.databinding.BindingAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
@@ -31,9 +33,11 @@ import com.example.spnfo.databinding.RacerRowBinding;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
+public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowAdapter.RacerRowViewHolder> {
 
     private static Comparator<RacerRow> mComparator = new Comparator<RacerRow>() {
         @Override
@@ -83,6 +87,7 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
     private Context mCtx;
     private OnRacerRowChangeListener racerRowChangeCallback;
     private ViewGroup mParent;
+    public static HashMap<String, Boolean> checkedItems = new HashMap<String, Boolean>();
 
     public RacerRowAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
@@ -96,20 +101,13 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
         return new RacerRowViewHolder(binding.getRoot(), binding);
     }
 
-    @Override
-    public void onViewRecycled(@NonNull RacerRowViewHolder holder) {
-//        Log.v("RECYCLED", holder.mTag.getText().toString());
+    public void onCheckBoxClicked(View v) {
+        Log.v("ADAPTER", "here");
     }
-
-//    @Override
-//    public void onViewAttachedToHolder(RacerRowViewHolder holder, int position) {
-//
-//    }
 
     @Override
     public void onBindViewHolder(final RacerRowViewHolder holder, final int position) {
         final RacerRow model = mSortedList.get(position);
-        holder.bind(model);
 
         if (model.getPositionInt() % 2 == 1) {
             holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.white, null));
@@ -123,20 +121,15 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
             holder.itemView.findViewById(R.id.data_drawer_constraint_layout).setVisibility(View.GONE);
         }
 
-////        Log.v("BINDVIEWHOLDER", holder.mTag.getText().toString());
-////        holder.mCheckBox.setOnCheckedChangeListener(null);
-//        holder.mBinding.racerCheckbox.setOnCheckedChangeListener(null);
-////        holder.mCheckBox.setChecked(model.getChecked());
-//        holder.mBinding.racerCheckbox.setChecked(model.getChecked());
-//
-//        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                racerRowChangeCallback.onCheckBoxChanged(model.getTag(), isChecked);
-////                holder.mCheckBox.setChecked(isChecked);
-//                holder.mBinding.racerCheckbox.setChecked(isChecked);
-//            }
-//        });
+        final NamedCheckBox ncb = (NamedCheckBox) holder.itemView.findViewById(R.id.racer_checkbox);
+        ncb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ncb.getTagName() != null && racerRowChangeCallback != null) {
+                    racerRowChangeCallback.onCheckBoxChanged(ncb.getTagName(), ((CheckBox) v).isChecked());
+                }
+            }
+        });
 
         ConstraintLayout bannerConstraintLayout = holder.itemView.findViewById(R.id.racer_row_constraint_layout);
 
@@ -165,6 +158,11 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
         });
 
         holder.bind(model);
+    }
+
+    @BindingAdapter("checked")
+    public static void setColor(View m, boolean isChecked) {
+        Log.v("SETCOLOR", Boolean.toString(isChecked));
     }
 
     @Override
@@ -208,12 +206,31 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowViewHolder> {
         mSortedList.replaceAll(models);
     }
 
+    private OnRacerRowChangeListener getOnRacerRowChangeListener() {
+        return racerRowChangeCallback;
+    }
+
     public void setOnRacerRowChangeListener(OnRacerRowChangeListener callback) {
         racerRowChangeCallback = callback;
     }
 
     public interface OnRacerRowChangeListener {
         public void onCheckBoxChanged(String tag, Boolean checked);
+    }
+
+    static public class RacerRowViewHolder extends RecyclerView.ViewHolder {
+
+        public RacerRowBinding mBinding;
+
+        public RacerRowViewHolder(View rowView, RacerRowBinding binding) {
+            super(binding.getRoot());
+            mBinding = binding;
+        }
+
+        public void bind(RacerRow item) {
+            mBinding.setModel(item);
+            mBinding.executePendingBindings();
+        }
     }
 
 }
