@@ -43,13 +43,17 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
                                                                 RacerSearchBarFragment.OnSearchChangeListener,
                                                                 RacerRowAdapter.OnRacerRowChangeListener {
 
-    private static final String[] TAGS = new String[]{ "CVDSH", "VLVRD", "BERNL", "FROOM", "SAGAN", "VDPOL", "QNTNA", "VANAT", "KRSTF", "VVANI", "PGCAR",
-            "PORTE", "LANDA", "ENRIC", "LOPEZ", "TOMDU", "RURAN", "YATES", "CRUSO", "MARTN", "CARPZ", "BARGL" };
+//    private static final String[] TAGS = new String[]{ "CVDSH", "VLVRD", "BERNL", "FROOM", "SAGAN", "VDPOL", "QNTNA", "VANAT", "KRSTF", "VVANI", "PGCAR",
+//            "PORTE", "LANDA", "ENRIC", "LOPEZ", "TOMDU", "RURAN", "YATES", "CRUSO", "MARTN", "CARPZ", "BARGL" };
 
-    private static final String[] NAMES = new String[] { "Mark Cavendish", "Alejandro Valverde", "Egan Bernal", "Chris Froome", "Peter Sagan", "Mathieu van der Poel",
-            "Nairo Quintana", "Wout van Aert", "Alexander Kristoff", "Elia Viviani", "Tadej Pogacar", "Richie Porte",
-            "Mikel Landa", "Enric Mas", "Miguel Angel Lopez", "Tom Dumoulin", "Rigoberto Uran", "Adam Yates", "Damiano Caruso",
-            "Guillaume Martin", "Richard Carapaz", "Warren Barguil" };
+//    private static final String[] NAMES = new String[] { "Mark Cavendish", "Alejandro Valverde", "Egan Bernal", "Chris Froome", "Peter Sagan", "Mathieu van der Poel",
+//            "Nairo Quintana", "Wout van Aert", "Alexander Kristoff", "Elia Viviani", "Tadej Pogacar", "Richie Porte",
+//            "Mikel Landa", "Enric Mas", "Miguel Angel Lopez", "Tom Dumoulin", "Rigoberto Uran", "Adam Yates", "Damiano Caruso",
+//            "Guillaume Martin", "Richard Carapaz", "Warren Barguil" };
+
+    private static final String[] TAGS = new String[]{ "CVDSH", "VLVRD", "BERNL", "FROOM" };
+
+    private static final String[] NAMES = new String[] { "Mark Cavendish", "Alejandro Valverde", "Egan Bernal", "Chris Froome"};
 
     Point screenSize;
     Float halfSubtractedHeight = (float) 0.06;
@@ -87,6 +91,11 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
         SpectatorSeparatorBarFragment specBarFrag = (SpectatorSeparatorBarFragment) getSupportFragmentManager().findFragmentById(R.id.spectator_bar);
         if (specBarFrag != null) {
             specBarFrag.setOnSpecBarChangeListener(this);
+        }
+
+        RacerSearchBarFragment searchBarFrag = (RacerSearchBarFragment) getSupportFragmentManager().findFragmentById(R.id.racer_search_bar_fragment);
+        if (searchBarFrag != null) {
+            searchBarFrag.setOnSearchChangeListener(this);
         }
 
         rlf = (RacerListFragment) getSupportFragmentManager().findFragmentById(R.id.racer_list);
@@ -127,21 +136,8 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
             final WebSocket ws = factory.createSocket("ws://server.spnfo.com?id=1234", 5000);
             ws.addListener(new WebSocketAdapter() {
                 @Override
-                public void onTextMessage(WebSocket websocket, String message) throws Exception {
-                    JSONArray jsonArray = new JSONArray(message);
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject newDataObject = jsonArray.getJSONObject(i);
-                        RacerRow curRow = findRacerRow(newDataObject.getString("tag"));
-                        curRow.update(newDataObject);
-                    }
-
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            updateMapMonitorTags();
-                        }
-                    });
+                public void onTextMessage(WebSocket websocket, String message) throws JSONException {
+                    parseWebSocketMessage(message);
                 }
             });
 
@@ -169,24 +165,19 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
         return null;
     }
 
-//    public void onCheckSelected(String tag, Boolean isChecked) {
-////        Log.v("CHECKED", tag);
-//        if (isChecked) {
-//            monitorTags.add(tag);
-//        } else {
-//            monitorTags.remove(tag);
-//        }
-//        //updateMapMonitorTags();
-//    }
-
-
-    public void onCheckBoxChanged(String tag, Boolean isChecked) {
+    public void onCheckBoxChanged(final String tag, Boolean isChecked) {
         if (isChecked) {
             monitorTags.add(tag);
             updateMapMonitorTags();
         } else {
             if (mRaceMapFragment != null) {
-                mRaceMapFragment.removeTag(tag);
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRaceMapFragment.removeTag(tag);
+                    }
+                });
+
                 monitorTags.remove(tag);
             }
         }
@@ -195,16 +186,83 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
     public void updateMapMonitorTags() {
         for (RacerRow rr : mModels) {
             if (monitorTags.contains(rr.getTag())) {
-                if (mRaceMapFragment != null) {
+                if (mRaceMapFragment != null && rr.getGeoLocation() != null) {
                     mRaceMapFragment.manageTag(rr.getTag(), rr.getGeoLocation());
                 }
             }
         }
     }
 
+    public void parseWebSocketMessage(String message) throws JSONException {
+        JSONObject topLevelJSON = new JSONObject(message);
+
+        switch (topLevelJSON.getString("type")) {
+            case "data":
+                JSONArray dataArray = topLevelJSON.getJSONArray("data");
+
+                for (int i = 0; i < dataArray.length(); i++) {
+                    JSONObject newDataObject = dataArray.getJSONObject(i);
+                    RacerRow curRow = findRacerRow(newDataObject.getString("tag"));
+                    curRow.update(newDataObject);
+                }
+
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateMapMonitorTags();
+                    }
+                });
+                break;
+
+            case "leaderboard":
+                final JSONArray leaderboardArray = topLevelJSON.getJSONArray("data");
+
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < leaderboardArray.length(); i++) {
+                            try {
+                                RacerRow cur = findRacerRow(leaderboardArray.getString(i));
+                                cur.setPosition(i+1);
+
+                                Handler leaderboardChangedHandler = new Handler(getApplicationContext().getMainLooper());
+                                leaderboardChangedHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+//                                        mAdapter.notifyDataSetChanged();
+                                        mAdapter.updateAll();
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
+                break;
+        }
+
+    }
+
     public void onGlobalCheck(Boolean isChecked) {
         if (rlf != null) {
             rlf.globalCheck(isChecked);
+        }
+
+        for (final RacerRow rr : mModels) {
+            if (isChecked && !monitorTags.contains(rr.getTag())) {
+                monitorTags.add(rr.getTag());
+            } else if (!isChecked && monitorTags.contains(rr.getTag()) && mRaceMapFragment != null) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRaceMapFragment.removeTag(rr.getTag());
+                    }
+                });
+                monitorTags.remove(rr.getTag());
+            }
         }
     }
 
@@ -235,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
     }
 
     public void filterDataset(String query) {
+        Log.v("filterDataset", "here");
         final String lowerCaseQuery = query.toLowerCase();
 
         final List<RacerRow> filteredModelList = new ArrayList<>();

@@ -24,9 +24,10 @@
 
     <ImageView
         android:id="@+id/slide_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:src="@drawable/drag_24"
+        android:src="@drawable/drag_icon_3"
+        app:layout_constraintWidth_percent="0.09"
         app:layout_constraintBottom_toBottomOf="@id/view_action_bar"
         app:layout_constraintLeft_toLeftOf="@id/view_action_bar"
         app:layout_constraintRight_toRightOf="@id/view_action_bar"

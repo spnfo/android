@@ -29,6 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:hint="Search..."
+            android:maxLines="1"
+            android:inputType="text"
             android:layout_gravity="center_vertical"
             android:background="@null"
             app:layout_constraintBottom_toBottomOf="parent"

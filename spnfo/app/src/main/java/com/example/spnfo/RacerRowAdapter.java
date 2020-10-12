@@ -73,14 +73,15 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowAdapter.RacerR
         }
 
         @Override
+        public void onMoved(int fromPosition, int toPosition) {
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
+        @Override
         public void onRemoved(int position, int count) {
             notifyItemRangeRemoved(position, count);
         }
 
-        @Override
-        public void onMoved(int fromPosition, int toPosition) {
-            notifyItemMoved(fromPosition, toPosition);
-        }
     });
 
     private LayoutInflater mInflater;
@@ -204,6 +205,14 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowAdapter.RacerR
 
     public void replaceAll(List<RacerRow> models) {
         mSortedList.replaceAll(models);
+    }
+
+    public void updateAll() {
+        mSortedList.beginBatchedUpdates();
+        for (int i = 0; i < mSortedList.size(); i++) {
+            mSortedList.updateItemAt(i, mSortedList.get(i));
+        }
+        mSortedList.endBatchedUpdates();
     }
 
     private OnRacerRowChangeListener getOnRacerRowChangeListener() {

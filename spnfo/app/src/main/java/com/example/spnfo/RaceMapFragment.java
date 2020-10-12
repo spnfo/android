@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -103,10 +104,18 @@ public class RaceMapFragment extends Fragment implements OnMapReadyCallback, Goo
         }
     }
 
-    public void addTag(String tagName, Double[] geoLocation) {
-        LatLng markerPos = new LatLng(geoLocation[0], geoLocation[1]);
-        Marker m = gMap.addMarker(new MarkerOptions().position(markerPos).title(tagName));
-        mMarkers.put(tagName, m);
+    public void addTag(final String tagName, Double[] geoLocation) {
+        final LatLng markerPos = new LatLng(geoLocation[0], geoLocation[1]);
+        Handler addMapMarkerHandler = new Handler(getContext().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override
+            public void run() {
+                Marker m = gMap.addMarker(new MarkerOptions().position(markerPos).title(tagName));
+                m.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_drop_small));
+                mMarkers.put(tagName, m);
+            }
+        };
+        addMapMarkerHandler.post(myRunnable);
     }
 
     public void updateTag(final String tagName, final Double[] geoLocation) {
@@ -122,8 +131,15 @@ public class RaceMapFragment extends Fragment implements OnMapReadyCallback, Goo
 
     public void removeTag(String tagName) {
         if (mMarkers.containsKey(tagName)) {
-            Marker m = mMarkers.get(tagName);
-            m.remove();
+            final Marker m = mMarkers.get(tagName);
+            Handler removeMapMarkerHandler = new Handler(getContext().getMainLooper());
+            Runnable myRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    m.remove();
+                }
+            };
+            removeMapMarkerHandler.post(myRunnable);
             mMarkers.remove(tagName);
         }
     }

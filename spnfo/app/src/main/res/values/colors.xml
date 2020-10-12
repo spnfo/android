@@ -2,7 +2,8 @@
 <resources>
     <!-- SPNFO colors -->
     <color name="spnfoDarkPurple">#3d348b</color>
-    <color name="spnfoLightPurple">#7678ed</color>
+    <color name="spnfoLightPurpleOld">#7678ed</color>
+    <color name="spnfoLightPurple">#6f71ec</color>
     <color name="spnfoPurple">#8f60a6</color>
     <color name="spnfoOrange">#ec994b</color>
     <color name="spnfoYellow">#f1d265</color>
