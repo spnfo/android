@@ -116,6 +116,15 @@ public class RacerRowAdapter extends RecyclerView.Adapter<RacerRowAdapter.RacerR
             holder.itemView.setBackgroundColor(mCtx.getResources().getColor(R.color.lightGray, null));
         }
 
+        // Set imageView resource
+        int resId = mCtx.getResources().getIdentifier(model.getTag().toLowerCase(), "drawable", mCtx.getPackageName());
+        if (resId != 0) {
+            // Profile image exists
+            holder.itemView.findViewById(R.id.racer_avatar_image).setBackgroundResource(resId);
+        } else {
+            holder.itemView.findViewById(R.id.racer_avatar_image).setBackgroundResource(R.drawable.no_profile_pic);
+        }
+
         if (model.getExpanded()) {
             holder.itemView.findViewById(R.id.data_drawer_constraint_layout).setVisibility(View.VISIBLE);
         } else {

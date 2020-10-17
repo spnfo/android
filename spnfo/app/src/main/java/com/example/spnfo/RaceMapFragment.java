@@ -1,6 +1,10 @@
 package com.example.spnfo;
 
+import android.graphics.Bitmap;
 import android.graphics.Camera;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -110,8 +115,26 @@ public class RaceMapFragment extends Fragment implements OnMapReadyCallback, Goo
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
+
                 Marker m = gMap.addMarker(new MarkerOptions().position(markerPos).title(tagName));
-                m.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_drop_small));
+
+                Drawable container = getContext().getDrawable(R.drawable.map_pin_drop_small);
+                container.setBounds(0, 0, 80,100);
+
+                int resId = getContext().getResources().getIdentifier(tagName.toLowerCase(), "drawable", getContext().getPackageName());
+                if (resId == 0) {
+                    // Profile image does not exist
+                    resId = R.drawable.no_profile_pic;
+                }
+                Drawable profile_pic = getContext().getDrawable(resId);
+                profile_pic.setBounds(10, 10, 70, 70);
+
+                Drawable[] layers = {container, profile_pic};
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                Bitmap b = Bitmap.createBitmap(80, 100, Bitmap.Config.ARGB_8888);
+
+                layerDrawable.draw(new Canvas(b));
+                m.setIcon(BitmapDescriptorFactory.fromBitmap(b));
                 mMarkers.put(tagName, m);
             }
         };

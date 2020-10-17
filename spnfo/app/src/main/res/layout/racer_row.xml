@@ -83,7 +83,6 @@
                     android:id="@+id/racer_avatar_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/pinot"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     app:layout_constraintLeft_toRightOf="parent"

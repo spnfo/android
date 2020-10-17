@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
 
 //    private static final String[] TAGS = new String[]{ "CVDSH", "VLVRD", "BERNL", "FROOM", "SAGAN", "VDPOL", "QNTNA", "VANAT", "KRSTF", "VVANI", "PGCAR",
 //            "PORTE", "LANDA", "ENRIC", "LOPEZ", "TOMDU", "RURAN", "YATES", "CRUSO", "MARTN", "CARPZ", "BARGL" };
-
+//
 //    private static final String[] NAMES = new String[] { "Mark Cavendish", "Alejandro Valverde", "Egan Bernal", "Chris Froome", "Peter Sagan", "Mathieu van der Poel",
 //            "Nairo Quintana", "Wout van Aert", "Alexander Kristoff", "Elia Viviani", "Tadej Pogacar", "Richie Porte",
 //            "Mikel Landa", "Enric Mas", "Miguel Angel Lopez", "Tom Dumoulin", "Rigoberto Uran", "Adam Yates", "Damiano Caruso",
@@ -229,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements SpectatorSeparato
                                 leaderboardChangedHandler.post(new Runnable() {
                                     @Override
                                     public void run() {
-//                                        mAdapter.notifyDataSetChanged();
                                         mAdapter.updateAll();
                                     }
                                 });

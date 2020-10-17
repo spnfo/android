@@ -39,7 +39,8 @@ public class RacerListFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.racer_list_fragment, container, false);
         mRecyclerView = v.findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setItemViewCacheSize(0);
 
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
@@ -72,4 +73,5 @@ public class RacerListFragment extends Fragment {
     public void filterDataset(ArrayList<RacerRow> filterdModels) {
         mRecyclerView.scrollToPosition(0);
     }
+
 }
